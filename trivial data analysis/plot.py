@@ -61,6 +61,27 @@ def rscplot(i):
     mp.tight_layout()
     mp.savefig((str(path)+'\\'+'results'+'\\'+r'Error_Graph_%d'+'.jpg')%i,format='jpg',dpi=1200)
     
+    
+def partial_plot(i):
+    mp.figure(figsize=[15,5])
+    mp.gcf().set_facecolor(np.ones(3) * 240 / 255)
+    mp.plot(tcodnt[1000:2000], temp[1000:2000,i],color='limegreen')
+    mp.title('The Timing Diagram of Signal %d' %i, fontsize=16)
+    mp.xlabel('time (s)', fontsize=12)
+    mp.ylabel("EMG", fontsize=12)
+    mp.tick_params(which='both', top=True, right=True, labelright=True, labelsize=10)
+    mp.grid(linestyle=':')
+    mp.plot(added_tcodnt[1000:2000], forecast[1005:2005, i], color='orangered')
+    mp.title('The %d-Step Forecast Of Signal %d' % ((n_steps+1), i), fontsize=16)
+    mp.xlabel('time (s)', fontsize=12)
+    mp.ylabel("EMG", fontsize=12)
+    mp.tick_params(which='both', top=True, right=True, labelright=True, labelsize=10)
+    mp.grid(linestyle=':')
+    mp.tight_layout()
+    mp.savefig((str(path)+'\\'+'results'+'\\'+'Partial_Timing_Graph_%d'+'.jpg')%i,format='jpg',dpi=2000)
+    
+    
+    
 if __name__=='__main__':
     path=r'D:\C盘备份\Tencent Files\391059727\FileRecv\xiezhiliang'
     name=r'xiezhiliang\1\三分之一'
@@ -90,13 +111,14 @@ if __name__=='__main__':
     rsdlsc=(forecastc-temp) 
     rsdlpctgc=rsdlsc/platevalue#percentage
     sqrpctgc=np.array(rsdlpctgc)*np.array(rsdlpctgc)
-    square=np.sum(np.array(rsdlsc[:,3])*np.array(rsdlsc[:,3]))/np.sum(np.array(temp[:,0])*np.array(temp[:,3]))
+    square=np.sum(np.array(rsdlsc[:,3])*np.array(rsdlsc[:,3]))/np.sum(np.array(temp[:,3])*np.array(temp[:,3]))
     if not os.path.exists(path+'\\'+'results'):
             os.makedirs(path+'\\'+'results')
     for i in range(l):
             cpplot(i)
     for i in range(l):
             rscplot(i)
+    partial_plot(3)#selected channel
     
     
     
