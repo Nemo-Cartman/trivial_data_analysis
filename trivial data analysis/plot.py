@@ -46,7 +46,7 @@ def rscplot(i):
     mp.xlabel('time (s)', fontsize=12)
     mp.ylabel("EMG", fontsize=12)
     mp.ylim((-0.6, 0.6))
-    mp.yticks(np.arange(-0.7, 0.6, 0.2))
+    mp.yticks(np.arange(-1, 1, 0.2))
     mp.tick_params(which='both', top=True, labelsize=10)
     mp.grid(linestyle=':')
     mp.subplot(313)
@@ -62,20 +62,21 @@ def rscplot(i):
     mp.savefig((str(path)+'\\'+'results'+'\\'+r'Error_Graph_%d'+'.jpg')%i,format='jpg',dpi=1200)
     
 if __name__=='__main__':
-    path=r'D:\C盘备份\Tencent Files\391059727\FileRecv\xiezhiliang\1\三分之一'
+    path=r'D:\C盘备份\Tencent Files\391059727\FileRecv\xiezhiliang'
     name=r'xiezhiliang\1\三分之一'
-    mat = np.loadtxt(path+r'\realtimerecord.txt', skiprows=0)
+    mat = np.loadtxt(path+r'\realtimerecord1.txt', skiprows=0)
     # 采集频率
-    f1 = 0.02   # 50Hz
+    f1 = 0.01   # 100Hz
     # 信号源数量
     mat=mat[:,1:]
     l = ((mat.shape)[1])/2##number of elements , for data without time information
     l=int(l)
     tcodnt = np.array(list(range(mat.shape[0]))) * f1
+    tcodnt=tcodnt[5:]
     added_tcodnt=tcodnt
-    temp=mat[:,:4]
-    forecastc=mat[:,4:]
-    forecast=mat[:,4:]
+    temp=mat[5:,:4]
+    forecastc=mat[:-5,4:]
+    forecast=mat[:-5,4:]
     n_steps=4
     mean_plate_n=20
     platevalue=np.vstack([temp.max()*e/e for e in temp[0:int(mean_plate_n/2)]])
@@ -89,6 +90,7 @@ if __name__=='__main__':
     rsdlsc=(forecastc-temp) 
     rsdlpctgc=rsdlsc/platevalue#percentage
     sqrpctgc=np.array(rsdlpctgc)*np.array(rsdlpctgc)
+    square=np.sum(np.array(rsdlsc[:,3])*np.array(rsdlsc[:,3]))/np.sum(np.array(temp[:,0])*np.array(temp[:,3]))
     if not os.path.exists(path+'\\'+'results'):
             os.makedirs(path+'\\'+'results')
     for i in range(l):
