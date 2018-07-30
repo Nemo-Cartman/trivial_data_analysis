@@ -15,7 +15,7 @@ import scipy.stats
 
 def process():
     #path=r'D:\C盘备份\Tencent Files\391059727\FileRecv\data2(1)\data2\processed'
-    path_origin=r'D:\C盘备份\Tencent Files\391059727\FileRecv\EMG信号强度与速度关系\new_folder\新建文件夹\新建文件夹'
+    path_origin=r'D:\C盘备份\Tencent Files\391059727\FileRecv\EMG信号强度与速度关系\S1\1'
     #path=r'D:\C盘备份\Tencent Files\391059727\FileRecv\徐小薇_伸肌(1)\徐小薇_伸肌'
     folders=os.listdir(path_origin)
     for folder in folders:
@@ -27,6 +27,8 @@ def process():
             os.remove(path+'\\'+'results'+'\\'+'output.txt')
         for name in files:
             if name == '受试者信息.txt':
+                continue
+            if name == 'results':
                 continue
             OLS_Verify(path,name)
             #print(name)
@@ -57,10 +59,10 @@ def OLS_Verify(path,name):
     
     XY=np.vstack([X,Y])
     kde=scipy.stats.gaussian_kde(XY)
-    kde.set_bandwidth(bw_method=0.5)
+    kde.set_bandwidth(bw_method='silverman')
     Z=kde(XY)
-    idx = Z.argsort()
-    X, Y, Z = X[idx], Y[idx], Z[idx]
+#    idx = Z.argsort()
+#    X, Y, Z = X[idx], Y[idx], Z[idx]
     
     fig=plt.figure()
     #plt.ylim(0,120)
@@ -76,7 +78,7 @@ def OLS_Verify(path,name):
     clb.set_label('probability density',fontsize=14,color='grey')
     print(name)
     #save image
-    plt.savefig(str(path)+'\\'+'results'+'\\'+str(name)+'.jpg',format='jpg',dpi=1200)
+    plt.savefig(str(path)+'\\'+'results'+'\\'+str(name)+'1.jpg',format='jpg',dpi=1200)
     string='\n\n\n\n'+str(name)+':\n'+str(results.summary())
     #save table
     out=open(path+'\\'+'results'+'\\'+'output.txt','a')
