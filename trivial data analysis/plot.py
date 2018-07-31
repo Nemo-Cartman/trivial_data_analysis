@@ -188,9 +188,9 @@ def colorbar(ax,T,Y,i,a,b,c):
     Y=np.array(Y)
     Y=Y[:,i]
     TY=np.vstack([T,Y])
-    kde=scipy.stats.gaussian_kde(TY)
+    kde=scipy.stats.gaussian_kde(Y)
     kde.set_bandwidth(bw_method='silverman')
-    Z=kde(TY)
+    Z=kde(Y)
     color=np.vstack([Z for i in range(c)])
     color=color[:,a:b]
     im=ax.imshow(color,cmap='RdGy')
@@ -264,13 +264,13 @@ def finder_father(path_origin):
 if __name__=='__main__':
     t=time.time()
 ##    try:
-    path_origin=r'D:\C盘备份\Tencent Files\391059727\FileRecv\谢志亮'
-    process(path_origin)    
+#    path_origin=r'D:\C盘备份\Tencent Files\391059727\FileRecv\谢志亮'
+#    process(path_origin)    
 ##    except Exception:
 ##        e=Exception
 ##        print('error',e,'-'*64,traceback.print_exc(file=sys.stdout),'-'*64)
-#    name=r'realtimerecord.txt'
-#    path=r'D:\C盘备份\Tencent Files\391059727\FileRecv\谢志亮\1\三分之一'
-#    worker(path,name)
+    name=r'realtimerecord.txt'
+    path=r'D:\C盘备份\Tencent Files\391059727\FileRecv\谢志亮\1\三分之一'
+    worker(path,name)
     deltat=time.time()-t
     print('time:',deltat)
