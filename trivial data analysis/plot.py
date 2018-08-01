@@ -61,12 +61,16 @@ def ploter(path,name):
     similarity=[1/(1+e) for e in distance_normalized]
     if not os.path.exists(path+'\\'+'results'):
             os.makedirs(path+'\\'+'results')
-    a=1400
-    b=1700
+    a=11800
+    b=12030
     c=20
+    d=11850
+    e=11890
 #    plots(0,tcodnt, temp, forecast,added_tcodnt,n_steps,path, rsdlsc,rsdlpctgc, sqrpctgc,a,b,c)
-    for i in range(l):
-        plots(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path, rsdlsc,rsdlpctgc, sqrpctgc,a,b,c)
+    
+#    for i in range(l):
+#        plots(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path, rsdlsc,rsdlpctgc, sqrpctgc,a,b,c,d,e)
+    
 #    for i in range(l):
 #            cpplot(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path)
 #    for i in range(l):
@@ -90,20 +94,20 @@ def cpplot(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path):
     #mp.figure(figsize=[20,10])
     #mp.gcf().set_facecolor(np.ones(3) * 240 / 255)
     #mp.subplot(211)
-    mp.plot(tcodnt, temp[:,i],color='black',label='original data')
+    mp.plot(tcodnt, temp[:,i],color='black',linewidth=2,label='original data')
     #mp.title('The Timing Diagram of Signal %d' %i, fontsize=16)
-    mp.xlabel('time (s)', fontsize=12)
-    mp.ylabel("EMG", fontsize=12)
+    mp.xlabel('time (s)', fontsize=size)
+    mp.ylabel("EMG", fontsize=size)
     mp.xlim(tcodnt[0],tcodnt[-1])
     mp.ylim(-np.amax(temp[:,i])/3,np.amax(temp[:,i]))
-    mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=10)
+    mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=size)
     #mp.grid(linestyle=':')
     #mp.subplot(212)
-    mp.plot(tcodnt, forecast[:, i], color='blue',linestyle='dashed',label='prediction')
-    mp.title('The Timing Diagram and The %d-Step Forecast Of Signal %d' % ((n_steps+1), i), fontsize=16)
-    mp.xlabel('time (s)', fontsize=12)
-    mp.ylabel("EMG", fontsize=12)
-    mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=10)
+    mp.plot(tcodnt, forecast[:, i], color='blue',linewidth=0.5,linestyle='dashed',label='prediction')
+    #mp.title('The Timing Diagram and The %d-Step Forecast Of Signal %d' % ((n_steps+1), i), fontsize=size)
+    mp.xlabel('time (s)', fontsize=size)
+    mp.ylabel("EMG", fontsize=size)
+    mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=size)
     leg=mp.legend()
     #mp.grid(linestyle=':')
     #mp.tight_layout()       
@@ -147,18 +151,18 @@ def partial_plot_for_ahead_interval(i,tcodnt, temp, forecast,added_tcodnt,n_step
     #mp.figure(figsize=[8,5])
     #mp.gcf().set_facecolor(np.ones(3) * 240 / 255)
     mp.plot(tcodnt[a:b], temp[a:b,i],color='black',label='original data')
-    mp.title('Partial Graph', fontsize=16)
-    mp.xlabel('time (s)', fontsize=12)
-    mp.ylabel("EMG", fontsize=12)
+    #mp.title('Partial Graph', fontsize=size)
+    #mp.xlabel('time (s)', fontsize=12)
+    #mp.ylabel("EMG", fontsize=12)
     mp.ylim(np.amin(temp[a:b,i]),np.amax(temp[a:b,i]))
     mp.xlim(tcodnt[a],tcodnt[b])
-    mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=10)
+    mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=size)
     mp.grid(linestyle=':')
     mp.plot(added_tcodnt[a:b], forecast[a+5:b+5, i], color='blue',linestyle='dashed',label='prediction')
     #mp.title('(Partial)The Timing Diagram and The %d-Step Forecast Of Signal %d' % ((n_steps+1), i), fontsize=16)
-    mp.xlabel('time (s)', fontsize=12)
-    mp.ylabel("EMG", fontsize=12)
-    mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=10)
+    #mp.xlabel('time (s)', fontsize=12)
+    #mp.ylabel("EMG", fontsize=12)
+    mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=size)
     #mp.grid(linestyle=':')
     #mp.tight_layout()
     #mp.savefig((str(path)+'\\'+'results'+'\\'+'Partial_Timing_Graph_ahead_%d'+'.jpg')%i,format='jpg',dpi=2000)
@@ -191,31 +195,41 @@ def colorbar(ax,T,Y,i,a,b,c):
     kde=scipy.stats.gaussian_kde(Y)
     kde.set_bandwidth(bw_method='silverman')
     Z=kde(Y)
-    color=np.vstack([Z for i in range(c)])
+    color=np.vstack([Y for i in range(c)])
     color=color[:,a:b]
     im=ax.imshow(color,cmap='RdGy')
     return im
     #clb=mp.colorbar(im,extend='both')
 
-def plots(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path, rsdlsc,rsdlpctgc, sqrpctgc,a,b,c):
-    mp.figure(figsize=[25,10])
-    grid=mp.GridSpec(3,30,wspace=1,hspace=0.4)
+def plots(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path, rsdlsc,rsdlpctgc, sqrpctgc,a,b,c,d,e):
+    fig=mp.figure(figsize=[15,6])#5:2,89mm
+    grid=mp.GridSpec(3,36,wspace=1,hspace=0.4)
     ax=mp.subplot(grid[:2,:18])
     cpplot(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path)
-    rscplot(i,tcodnt, rsdlsc, rsdlpctgc, sqrpctgc,path)
+    #rscplot(i,tcodnt, rsdlsc, rsdlpctgc, sqrpctgc,path)
     ax=mp.subplot(grid[2,:18])
     im1=colorbar(ax,tcodnt, rsdlsc,i,0,-1,c**2)
+    ax.set_yticks([])
     ax=mp.subplot(grid[2,21:29])
-    im2=colorbar(ax,tcodnt, rsdlsc,i,a,b,c)
+    im2=colorbar(ax,tcodnt, rsdlsc,i,a,b,int(c/2))
+    ax.set_yticks([])
     ax=mp.subplot(grid[:2,21:29])
     partial_plot_for_ahead_interval(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path,rsdlpctgc,a,b)
     ax1=mp.subplot(grid[:,29])
     clb1=mp.colorbar(im2,cax=ax1,extend='both')
-    clb1.set_label('KDE of residuals',fontsize=12,color='grey')
+    #clb1.set_label('residuals',fontsize=12,color='grey')
     ax2=mp.subplot(grid[:,18])
     clb2=mp.colorbar(im1,cax=ax2,extend='both')
-    clb2.set_label('KDE of residuals',fontsize=12,color='grey')
-    mp.savefig((str(path)+'\\'+'results'+'\\'+'Accuracy_Graph_%d'+'.svg')%i,format='svg')
+    ax=mp.subplot(grid[:2,32:35])
+    partial_plot_for_ahead_interval(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path,rsdlpctgc,d,e)
+    ax=mp.subplot(grid[2,32:35])
+    im3=colorbar(ax,tcodnt, rsdlsc,i,d,e,int(c/5))
+    ax.set_yticks([])
+    ax3=mp.subplot(grid[:,35])
+    clb3=mp.colorbar(im3,cax=ax3,extend='both')
+    clb3.set_label('residuals',fontsize=size,color='grey')
+    #clb3.set_label('residuals',fontsize=12,color='grey')
+    #mp.savefig((str(path)+'\\'+'results'+'\\'+'Accuracy_Graph_%d'+'.jpg')%i,format='jpg',dpi=2000)
 
 def process(path_origin):
     finder_father(path_origin)
@@ -263,14 +277,15 @@ def finder_father(path_origin):
     
 if __name__=='__main__':
     t=time.time()
+    size=16
 ##    try:
-#    path_origin=r'D:\C盘备份\Tencent Files\391059727\FileRecv\谢志亮'
-#    process(path_origin)    
+    path_origin=r'C:\Users\39105\Downloads\精确控制频率'
+    process(path_origin)    
 ##    except Exception:
 ##        e=Exception
 ##        print('error',e,'-'*64,traceback.print_exc(file=sys.stdout),'-'*64)
-    name=r'realtimerecord.txt'
-    path=r'D:\C盘备份\Tencent Files\391059727\FileRecv\谢志亮\1\三分之一'
-    worker(path,name)
+#    name=r'realtimerecord.txt'
+#    path=r'C:\Users\39105\Downloads\谢志亮_with_results\1\三分之一'
+#    worker(path,name)
     deltat=time.time()-t
     print('time:',deltat)
