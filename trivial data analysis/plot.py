@@ -68,8 +68,8 @@ def ploter(path,name):
     e=11890
 #    plots(0,tcodnt, temp, forecast,added_tcodnt,n_steps,path, rsdlsc,rsdlpctgc, sqrpctgc,a,b,c)
     
-#    for i in range(l):
-#        plots(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path, rsdlsc,rsdlpctgc, sqrpctgc,a,b,c,d,e)
+    for i in range(l):
+        plots(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path, rsdlsc,rsdlpctgc, sqrpctgc,a,b,c,d,e)
     
 #    for i in range(l):
 #            cpplot(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path)
@@ -94,7 +94,7 @@ def cpplot(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path):
     #mp.figure(figsize=[20,10])
     #mp.gcf().set_facecolor(np.ones(3) * 240 / 255)
     #mp.subplot(211)
-    mp.plot(tcodnt, temp[:,i],color='black',linewidth=2,label='original data')
+    mp.plot(tcodnt, temp[:,i],color='black',linewidth=2,label='original')
     #mp.title('The Timing Diagram of Signal %d' %i, fontsize=16)
     mp.xlabel('time (s)', fontsize=size)
     mp.ylabel("EMG", fontsize=size)
@@ -103,12 +103,12 @@ def cpplot(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path):
     mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=size)
     #mp.grid(linestyle=':')
     #mp.subplot(212)
-    mp.plot(tcodnt, forecast[:, i], color='blue',linewidth=0.5,linestyle='dashed',label='prediction')
+    mp.plot(tcodnt, forecast[:, i], color='blue',linewidth=0.5,linestyle='dashed',label='predicted')
     #mp.title('The Timing Diagram and The %d-Step Forecast Of Signal %d' % ((n_steps+1), i), fontsize=size)
     mp.xlabel('time (s)', fontsize=size)
     mp.ylabel("EMG", fontsize=size)
     mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=size)
-    leg=mp.legend()
+    leg=mp.legend(fontsize=size,ncol=2)
     #mp.grid(linestyle=':')
     #mp.tight_layout()       
     #mp.savefig((str(path)+'\\'+'results'+'\\'+'Timing_Graph_%d'+'.jpg')%i,format='jpg',dpi=1200)
@@ -119,7 +119,7 @@ def rscplot(i,tcodnt, rsdlsc, rsdlpctgc, sqrpctgc,path):
     #mp.subplot(311)
     mp.plot(tcodnt, rsdlsc[:,i], color='red',label='residuals')
     #mp.title('The Residuls After Correction Of Signal %d' %i, fontsize=16)
-    leg=mp.legend()
+    leg=mp.legend(fontsize=size)
     #mp.xlabel('time (s)', fontsize=12)
     #mp.ylabel("value", fontsize=12)
     #mp.ylim(np.amin(rsdlsc[:,i]),np.amax(rsdlsc[:,i]))
@@ -150,7 +150,7 @@ def rscplot(i,tcodnt, rsdlsc, rsdlpctgc, sqrpctgc,path):
 def partial_plot_for_ahead_interval(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path,rsdlpctgc,a,b):
     #mp.figure(figsize=[8,5])
     #mp.gcf().set_facecolor(np.ones(3) * 240 / 255)
-    mp.plot(tcodnt[a:b], temp[a:b,i],color='black',label='original data')
+    mp.plot(tcodnt[a:b], temp[a:b,i],color='black',label='original')
     #mp.title('Partial Graph', fontsize=size)
     #mp.xlabel('time (s)', fontsize=12)
     #mp.ylabel("EMG", fontsize=12)
@@ -158,7 +158,7 @@ def partial_plot_for_ahead_interval(i,tcodnt, temp, forecast,added_tcodnt,n_step
     mp.xlim(tcodnt[a],tcodnt[b])
     mp.tick_params(which='right', top=True, right=True, labelright=True, labelsize=size)
     mp.grid(linestyle=':')
-    mp.plot(added_tcodnt[a:b], forecast[a+5:b+5, i], color='blue',linestyle='dashed',label='prediction')
+    mp.plot(added_tcodnt[a:b], forecast[a+5:b+5, i], color='blue',linestyle='dashed',label='predicted')
     #mp.title('(Partial)The Timing Diagram and The %d-Step Forecast Of Signal %d' % ((n_steps+1), i), fontsize=16)
     #mp.xlabel('time (s)', fontsize=12)
     #mp.ylabel("EMG", fontsize=12)
@@ -210,26 +210,26 @@ def plots(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path, rsdlsc,rsdlpctgc, 
     ax=mp.subplot(grid[2,:18])
     im1=colorbar(ax,tcodnt, rsdlsc,i,0,-1,c**2)
     ax.set_yticks([])
-    ax=mp.subplot(grid[2,21:29])
+    ax=mp.subplot(grid[2,21:35])
     im2=colorbar(ax,tcodnt, rsdlsc,i,a,b,int(c/2))
     ax.set_yticks([])
-    ax=mp.subplot(grid[:2,21:29])
+    ax=mp.subplot(grid[:2,21:35])
     partial_plot_for_ahead_interval(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path,rsdlpctgc,a,b)
-    ax1=mp.subplot(grid[:,29])
+    ax1=mp.subplot(grid[:,35])
     clb1=mp.colorbar(im2,cax=ax1,extend='both')
     #clb1.set_label('residuals',fontsize=12,color='grey')
     ax2=mp.subplot(grid[:,18])
     clb2=mp.colorbar(im1,cax=ax2,extend='both')
-    ax=mp.subplot(grid[:2,32:35])
-    partial_plot_for_ahead_interval(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path,rsdlpctgc,d,e)
-    ax=mp.subplot(grid[2,32:35])
-    im3=colorbar(ax,tcodnt, rsdlsc,i,d,e,int(c/5))
-    ax.set_yticks([])
-    ax3=mp.subplot(grid[:,35])
-    clb3=mp.colorbar(im3,cax=ax3,extend='both')
-    clb3.set_label('residuals',fontsize=size,color='grey')
-    #clb3.set_label('residuals',fontsize=12,color='grey')
-    #mp.savefig((str(path)+'\\'+'results'+'\\'+'Accuracy_Graph_%d'+'.jpg')%i,format='jpg',dpi=2000)
+    clb1.set_label('residuals',fontsize=size)
+#    ax=mp.subplot(grid[:2,32:35])
+#    partial_plot_for_ahead_interval(i,tcodnt, temp, forecast,added_tcodnt,n_steps,path,rsdlpctgc,d,e)
+#    ax=mp.subplot(grid[2,32:35])
+#    im3=colorbar(ax,tcodnt, rsdlsc,i,d,e,int(c/5))
+#    ax.set_yticks([])
+#    ax3=mp.subplot(grid[:,35])
+#    clb3=mp.colorbar(im3,cax=ax3,extend='both')
+#    clb3.set_label('residuals',fontsize=size,color='grey')
+    mp.savefig((str(path)+'\\'+'results'+'\\'+'Accuracy_Graph_%d'+'.jpg')%i,format='jpg',dpi=2000)
 
 def process(path_origin):
     finder_father(path_origin)
@@ -278,14 +278,14 @@ def finder_father(path_origin):
 if __name__=='__main__':
     t=time.time()
     size=16
-##    try:
-    path_origin=r'C:\Users\39105\Downloads\精确控制频率'
-    process(path_origin)    
+###    try:
+#    path_origin=r'D:\C盘备份\Tencent Files\391059727\FileRecv\谢志亮\1\三分之一'
+#    process(path_origin)    
 ##    except Exception:
 ##        e=Exception
 ##        print('error',e,'-'*64,traceback.print_exc(file=sys.stdout),'-'*64)
-#    name=r'realtimerecord.txt'
-#    path=r'C:\Users\39105\Downloads\谢志亮_with_results\1\三分之一'
-#    worker(path,name)
+    name=r'realtimerecord.txt'
+    path=r'D:\C盘备份\Tencent Files\391059727\FileRecv\谢志亮\1\三分之一'
+    worker(path,name)
     deltat=time.time()-t
     print('time:',deltat)
